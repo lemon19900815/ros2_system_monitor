@@ -9,7 +9,8 @@ def generate_launch_description():
             package='system_monitor',
             executable='system_monitor',
             name='system_monitor',
-            output='screen'
+            output='screen',
+            parameters=[{'topic_path': 'pc1'}],
         ),
         # 多个节点就新增Node即可...
     ])

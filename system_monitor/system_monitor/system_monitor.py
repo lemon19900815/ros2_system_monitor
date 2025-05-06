@@ -31,7 +31,11 @@ from diagnostic_msgs.msg import DiagnosticArray, DiagnosticStatus, KeyValue
 class SystemMonitor(Node):
     def __init__(self):
         super().__init__('system_monitor')
-        self.pub = self.create_publisher(DiagnosticArray, '/diagnostics', 10)
+
+        self.declare_parameter('topic_path', 'default_value')
+        topic_path = self.get_parameter('topic_path').get_parameter_value().string_value
+
+        self.pub = self.create_publisher(DiagnosticArray, topic_path + '/diagnostics', 10)
         self.timer = self.create_timer(1.0, self.update)
 
     def update(self):
@@ -79,9 +83,9 @@ class SystemMonitor(Node):
 
         self.pub.publish(msg)
 
-def main():
+def main(args=None):
     try:
-        rclpy.init()
+        rclpy.init(args=args)
         node = SystemMonitor()
         rclpy.spin(node)
         rclpy.shutdown()
